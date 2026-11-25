@@ -1,0 +1,54 @@
+CREATE TABLE addresses (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    user_id BIGINT NOT NULL,
+    recipient_name VARCHAR(200) NOT NULL,
+    phone VARCHAR(30) NOT NULL,
+    address_line VARCHAR(500) NOT NULL,
+    city VARCHAR(100) NOT NULL,
+    country VARCHAR(100) NOT NULL DEFAULT 'Cambodia',
+    is_default TINYINT NOT NULL DEFAULT 0,
+    is_active TINYINT NOT NULL DEFAULT 1 CHECK (is_active IN (0,1)), created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE orders (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    user_id BIGINT NOT NULL,
+    coupon_id BIGINT NULL,
+    order_number VARCHAR(100) NOT NULL UNIQUE,
+    status VARCHAR(30) NOT NULL DEFAULT 'PENDING' CHECK (status IN ('PENDING','CONFIRMED','PROCESSING','SHIPPED','DELIVERED','CANCELLED')),
+    shipping_address JSON NOT NULL,
+    subtotal DECIMAL(12,2) NOT NULL CHECK (subtotal >= 0),
+    discount_amount DECIMAL(12,2) NOT NULL DEFAULT 0 CHECK (discount_amount >= 0),
+    shipping_fee DECIMAL(12,2) NOT NULL DEFAULT 0 CHECK (shipping_fee >= 0),
+    total_amount DECIMAL(12,2) NOT NULL CHECK (total_amount >= 0),
+    currency CHAR(3) NOT NULL DEFAULT 'USD',
+    updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CHECK (total_amount = subtotal - discount_amount + shipping_fee)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE order_items (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    order_id BIGINT NOT NULL,
+    variant_id BIGINT NOT NULL,
+    product_name VARCHAR(200) NOT NULL,
+    sku VARCHAR(100) NOT NULL,
+    size_name VARCHAR(50),
+    color_name VARCHAR(100),
+    quantity INT NOT NULL CHECK (quantity > 0),
+    unit_price DECIMAL(12,2) NOT NULL CHECK (unit_price >= 0),
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE shipments (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    order_id BIGINT NOT NULL,
+    carrier VARCHAR(100),
+    tracking_number VARCHAR(150),
+    status VARCHAR(30) NOT NULL DEFAULT 'PENDING' CHECK (status IN ('PENDING','SHIPPED','DELIVERED','FAILED','RETURNED')),
+    shipped_at DATETIME NULL,
+    delivered_at DATETIME NULL,
+    updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+

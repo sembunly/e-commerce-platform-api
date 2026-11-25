@@ -1,0 +1,16 @@
+CREATE TABLE payments (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    order_id BIGINT NOT NULL,
+    method VARCHAR(30) NOT NULL CHECK (method IN ('COD','KHQR')),
+    provider VARCHAR(100),
+    provider_reference VARCHAR(200) NULL,
+    idempotency_key VARCHAR(150) NOT NULL UNIQUE,
+    amount DECIMAL(12,2) NOT NULL CHECK (amount >= 0),
+    currency CHAR(3) NOT NULL DEFAULT 'USD',
+    status VARCHAR(30) NOT NULL DEFAULT 'PENDING' CHECK (status IN ('PENDING','PAID','FAILED','REFUNDED','EXPIRED')),
+    paid_at DATETIME NULL,
+    updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE (provider, provider_reference)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
