@@ -1,6 +1,8 @@
 package com.bunli.fashion.auth.entity;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.JdbcTypeCode;
+import java.sql.Types;
 import java.time.Instant;
 
 @Entity
@@ -22,6 +24,7 @@ public class AuthToken {
     private Instant revokedAt;
     @Column(name = "used_at")
     private Instant usedAt;
+    @JdbcTypeCode(Types.TINYINT)
     @Column(name = "is_active", nullable = false)
     private boolean active = true;
 

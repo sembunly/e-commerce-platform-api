@@ -1,6 +1,8 @@
 package com.bunli.fashion.auth.entity;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.JdbcTypeCode;
+import java.sql.Types;
 import java.time.Instant;
 
 @Entity
@@ -20,10 +22,12 @@ public class AppUser {
     @Column(name = "last_name")
     private String lastName;
     private String phone;
+    @JdbcTypeCode(Types.TINYINT)
     @Column(name = "email_verified", nullable = false)
     private boolean emailVerified;
     @Column(name = "last_login_at")
     private Instant lastLoginAt;
+    @JdbcTypeCode(Types.TINYINT)
     @Column(name = "is_active", nullable = false)
     private boolean active = true;
 

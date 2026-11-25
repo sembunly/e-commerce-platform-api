@@ -4,8 +4,8 @@ spring:
 
   datasource:
     url: ${SPRING_DATASOURCE_URL:jdbc:mysql://localhost:3307/fashion_ecom_db}
-    username: ${SPRING_DATASOURCE_USERNAME:fashion_user}
-    password: ${SPRING_DATASOURCE_PASSWORD}
+    username: ${MYSQL_USER:fashion_user}
+    password: "${MYSQL_PASSWORD:0000}"
     driver-class-name: com.mysql.cj.jdbc.Driver
 
   jpa:
@@ -24,7 +24,9 @@ spring:
     redis:
       host: ${SPRING_DATA_REDIS_HOST:localhost}
       port: ${SPRING_DATA_REDIS_PORT:6379}
-      password: ${SPRING_DATA_REDIS_PASSWORD}
+      password: "${SPRING_DATA_REDIS_PASSWORD:${REDIS_PASSWORD:0000}}"
+      repositories:
+        enabled: false
 
   servlet:
     multipart:
@@ -47,6 +49,6 @@ management:
 
 minio:
   endpoint: ${MINIO_ENDPOINT:http://localhost:9000}
-  access-key: ${MINIO_ACCESS_KEY}
-  secret-key: ${MINIO_SECRET_KEY}
+  access-key: ${MINIO_ACCESS_KEY:${MINIO_ROOT_USER:fashion_admin}}
+  secret-key: "${MINIO_SECRET_KEY:${MINIO_ROOT_PASSWORD:00000000}}"
   bucket: fashion-media

@@ -17,7 +17,7 @@ Planned contract; implementation not verified. Base URL: `http://localhost/api/v
 Implemented request summary:
 
 - `register`: `username`, `email`, `password` (minimum 8 characters); optional `firstName`, `lastName`, `phone`.
-- `login`: `email`, `password`; returns a 15-minute Bearer access token and a 30-day refresh token.
+- `login`: `username`, `password`; returns a 15-minute Bearer access token and a 30-day refresh token.
 - `refresh` and `logout`: `{ "refreshToken": "..." }`. Refresh tokens are stored only as SHA-256 hashes and rotated on refresh.
 - `forgot-password`: `{ "email": "..." }`; returns the same response whether or not the account exists. Configure an email provider before production use.
 - `reset-password`: `{ "token": "...", "password": "..." }`.

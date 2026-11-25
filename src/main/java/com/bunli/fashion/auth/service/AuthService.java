@@ -59,10 +59,10 @@ public class AuthService {
 
     @Transactional
     public TokenResponse login(LoginRequest request) {
-        AppUser user = users.findByEmailIgnoreCase(normaliseEmail(request.email()))
-                .orElseThrow(() -> unauthorized("Invalid email or password"));
+        AppUser user = users.findByUsernameIgnoreCase(request.username().trim())
+                .orElseThrow(() -> unauthorized("Invalid username or password"));
         if (!user.isActive() || !passwordEncoder.matches(request.password(), user.getPasswordHash()))
-            throw unauthorized("Invalid email or password");
+            throw unauthorized("Invalid username or password");
         user.setLastLoginAt(Instant.now());
         return issueTokens(user);
     }

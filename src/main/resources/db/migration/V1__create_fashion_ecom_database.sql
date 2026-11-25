@@ -119,27 +119,27 @@ CREATE TABLE role_permissions (
 
 -- 08. Authentication Tokens
 CREATE TABLE auth_tokens (
-                             id BIGINT AUTO_INCREMENT PRIMARY KEY,
-                             user_id BIGINT NOT NULL,
-                             token_hash VARCHAR(255) NOT NULL UNIQUE,
-                             token_type VARCHAR(30) NOT NULL,
-                             expires_at DATETIME NOT NULL,
-                             revoked_at DATETIME NULL,
-                             used_at DATETIME NULL,
-                             ip_address VARCHAR(45),
-                             user_agent VARCHAR(500),
-                             is_active TINYINT NOT NULL DEFAULT 1,
-                             created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    user_id BIGINT NOT NULL,
+    token_hash VARCHAR(255) NOT NULL,
+    token_type VARCHAR(30) NOT NULL,
+    expires_at DATETIME NOT NULL,
+    revoked_at DATETIME NULL,
+    used_at DATETIME NULL,
+    ip_address VARCHAR(45) NULL,
+    user_agent VARCHAR(500) NULL,
+    is_active TINYINT NOT NULL DEFAULT 1,
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
-                             CHECK (is_active IN (0, 1)),
-                             CHECK (
-                                 token_type IN (
-                                                'REFRESH',
-                                                'PASSWORD_RESET',
-                                                'EMAIL_VERIFICATION'
-                                     )
-                                 )
-);CREATE TABLE categories (
+    CONSTRAINT uk_auth_tokens_token_hash UNIQUE (token_hash),
+    CONSTRAINT chk_auth_tokens_is_active CHECK (is_active IN (0, 1)),
+    CONSTRAINT chk_auth_tokens_type CHECK (token_type IN ('REFRESH', 'PASSWORD_RESET', 'EMAIL_VERIFICATION')),
+    CONSTRAINT fk_auth_tokens_user_id FOREIGN KEY (user_id) REFERENCES users(id),
+    INDEX idx_auth_tokens_expires_at (expires_at),
+    INDEX idx_auth_tokens_user_type_active (user_id, token_type, is_active)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE categories (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     parent_id BIGINT NULL,
     name VARCHAR(200) NOT NULL,
@@ -229,11 +229,13 @@ CREATE TABLE product_variants (
     color_id BIGINT NOT NULL,
     sku VARCHAR(100) NOT NULL UNIQUE,
     price DECIMAL(12,2) NOT NULL CHECK (price >= 0),
-    sale_price DECIMAL(12,2) NULL CHECK (sale_price >= 0 AND sale_price <= price),
+    sale_price DECIMAL(12,2) NULL,
     stock_quantity INT NOT NULL DEFAULT 0 CHECK (stock_quantity >= 0),
-    reserved_quantity INT NOT NULL DEFAULT 0 CHECK (reserved_quantity >= 0 AND reserved_quantity <= stock_quantity),
+    reserved_quantity INT NOT NULL DEFAULT 0,
     is_active TINYINT NOT NULL DEFAULT 1 CHECK (is_active IN (0,1)), created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    UNIQUE (product_id, color_id, size_id)
+    UNIQUE (product_id, color_id, size_id),
+    CHECK (sale_price IS NULL OR (sale_price >= 0 AND sale_price <= price)),
+    CHECK (reserved_quantity >= 0 AND reserved_quantity <= stock_quantity)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE product_images (
@@ -439,12 +441,10 @@ ALTER TABLE module ADD CONSTRAINT fk_module_parent_id FOREIGN KEY (parent_id) RE
 ALTER TABLE module_detail ADD CONSTRAINT fk_module_detail_module_id FOREIGN KEY (module_id) REFERENCES module(id);
 ALTER TABLE role_permissions ADD CONSTRAINT fk_role_permissions_role_id FOREIGN KEY (role_id) REFERENCES roles(id);
 ALTER TABLE role_permissions ADD CONSTRAINT fk_role_permissions_module_detail_id FOREIGN KEY (module_detail_id) REFERENCES module_detail(id);
-ALTER TABLE auth_tokens ADD CONSTRAINT fk_auth_tokens_user_id FOREIGN KEY (user_id) REFERENCES users(id);
 
 CREATE INDEX idx_products_active_created ON products(is_active, created_at);
 CREATE INDEX idx_orders_user_created ON orders(user_id, created_at);
 CREATE INDEX idx_variants_filter ON product_variants(color_id, size_id, is_active);
-CREATE INDEX idx_tokens_expiry ON auth_tokens(expires_at);
 CREATE INDEX idx_inventory_variant_created ON inventory_movements(variant_id, created_at);
 INSERT INTO roles(name,code,is_system) VALUES ('Administrator','ADMIN',1),('Staff','STAFF',0),('Customer','CUSTOMER',1);
 INSERT INTO module_type(name,code,sort_order) VALUES ('Overview','OVERVIEW',1),('Catalog','CATALOG',2),('Sales','SALES',3),('Marketing','MARKETING',4),('Settings','SETTINGS',5);
