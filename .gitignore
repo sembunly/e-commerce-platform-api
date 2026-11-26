@@ -38,3 +38,8 @@ build/
 !.env.example.DS_Store
 
 .DS_Store
+
+# Cloudflare Tunnel credentials and tokens must never be committed.
+/cloudflare/*.json
+/cloudflare/*.pem
+/cloudflare/*.token

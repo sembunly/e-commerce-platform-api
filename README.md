@@ -19,6 +19,16 @@ docker compose up --build
 - phpMyAdmin: `http://localhost:8081`
 - MinIO Console: `http://localhost:9001`
 
+## Cloudflare Tunnel
+
+With Docker Compose running, start the named tunnel:
+
+```sh
+cloudflared tunnel --config cloudflare/config.yml run avenzo
+```
+
+See [Cloudflare Tunnel setup](doc/run-with-cloudflare.md) for DNS, validation, and troubleshooting.
+
 ## Documentation
 
 - API endpoints: [`doc/endpoint.md`](doc/endpoint.md)

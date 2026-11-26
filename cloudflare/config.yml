@@ -1,0 +1,6 @@
+tunnel: 123c1214-fea8-42fa-aa7c-f27ff00da047
+credentials-file: /Users/macbook/.cloudflared/123c1214-fea8-42fa-aa7c-f27ff00da047.json
+ingress:
+  - hostname: avenzo-api.bunli-it.site
+    service: http://localhost:80
+  - service: http_status:404
