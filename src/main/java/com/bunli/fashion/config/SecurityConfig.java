@@ -35,6 +35,7 @@ public class SecurityConfig {
                         "/v3/api-docs/**").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/v1/navigation/**", "/api/v1/categories/**",
                         "/api/v1/collections/**", "/api/v1/home", "/api/v1/banners",
+                        "/api/v1/products", "/api/v1/products/**", "/api/v1/stores/**", "/api/v1/articles/**",
                         "/api/v1/products/new-arrivals", "/api/v1/products/featured",
                         "/api/v1/products/best-sellers", "/api/v1/products/sale").permitAll()
                 .anyRequest().authenticated())
