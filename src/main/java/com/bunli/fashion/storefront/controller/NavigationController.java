@@ -38,7 +38,6 @@ public class NavigationController {
     }
 
     // ── Navigation ────────────────────────────────────────────────────────
-
     @Operation(summary = "Get full mega-menu navigation tree", description = "Returns all active navigation items in a tree structure. "
             + "Top-level items map to main tabs (Women, Men, New Arrivals, Collections, Sale). "
             + "Children contain nested category/sub-category links enriched with "
@@ -56,7 +55,6 @@ public class NavigationController {
     }
 
     // ── Categories ────────────────────────────────────────────────────────
-
     @Operation(summary = "Get the full category tree", description = "Returns active categories nested to arbitrary depth. "
             + "Top-level: Women, Men, New Arrivals, Sale. "
             + "Second-level: Shoes, Bags, Accessories.")
@@ -80,7 +78,6 @@ public class NavigationController {
     }
 
     // ── Collections ───────────────────────────────────────────────────────
-
     @Operation(summary = "Get all active collections", description = "Returns every active collection with cover image and slug, "
             + "ordered alphabetically. Used in the Collections mega-menu tab "
             + "and the homepage featured-collections row.")
@@ -97,7 +94,6 @@ public class NavigationController {
     }
 
     // ── Homepage ─────────────────────────────────────────────────────────
-
     @Operation(summary = "Get the full homepage payload", description = "Single call that hydrates the entire storefront homepage: "
             + "navigation tree, hero banners, promotional banners, "
             + "featured collections, category tree, and product sections "
@@ -108,7 +104,6 @@ public class NavigationController {
     }
 
     // ── Banners ───────────────────────────────────────────────────────────
-
     @Operation(summary = "Get all currently active and scheduled banners", description = "Returns banners where is_active = 1 and the current time is "
             + "within [starts_at, ends_at]. Ordered by sort_order ascending. "
             + "Banners with sort_order < 100 are hero banners; >= 100 are promotional.")

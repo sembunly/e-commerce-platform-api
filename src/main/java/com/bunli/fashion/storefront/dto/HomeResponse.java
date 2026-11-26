@@ -18,14 +18,15 @@ import java.util.List;
  * </ol>
  * </p>
  */
+
 public record HomeResponse(
-                List<NavigationItemResponse> navigation,
-                /** Hero carousel banners (sort_order < 100) */
-                List<BannerResponse> heroBanners,
-                /** Promotional strip banners (sort_order >= 100) */
-                List<BannerResponse> promotionalBanners,
-                List<CategoryResponse> categories,
-                /** Featured collections for the homepage grid */
-                List<CollectionResponse> featuredCollections,
-                List<ProductSectionResponse> sections) {
+        List<NavigationItemResponse> navigation,
+        /** Hero carousel banners (sort_order < 100) */
+        List<BannerResponse> heroBanners,
+        /** Promotional strip banners (sort_order >= 100) */
+        List<BannerResponse> promotionalBanners,
+        List<CategoryResponse> categories,
+        /** Featured collections for the homepage grid */
+        List<CollectionResponse> featuredCollections,
+        List<ProductSectionResponse> sections) {
 }

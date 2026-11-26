@@ -9,11 +9,10 @@ package com.bunli.fashion.storefront.dto;
  * </p>
  */
 public record MediaResponse(
-        Long   id,
-        String bucket,
-        String objectKey,
-        String contentType,
-        long   sizeBytes,
-        /** Pre-built public URL: {@code <minioBase>/<bucket>/<objectKey>} */
-        String url
-) {}
+                Long id,
+                String bucket,
+                String objectKey,
+                String contentType,
+                long sizeBytes,
+                String url) {
+}

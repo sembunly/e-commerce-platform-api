@@ -10,12 +10,12 @@ import java.util.List;
  * </p>
  */
 public record CategoryResponse(
-        Long   id,
-        Long   parentId,
-        String name,
-        String slug,
-        String description,
-        MediaResponse image,
-        int    sortOrder,
-        List<CategoryResponse> children
-) {}
+                Long id,
+                Long parentId,
+                String name,
+                String slug,
+                String description,
+                MediaResponse image,
+                int sortOrder,
+                List<CategoryResponse> children) {
+}

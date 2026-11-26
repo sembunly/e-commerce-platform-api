@@ -14,7 +14,9 @@ public interface ProductVariantRepository extends JpaRepository<ProductVariant, 
 
     interface CardPriceView {
         Long getProductId();
+
         BigDecimal getPrice();
+
         BigDecimal getSalePrice();
     }
 
@@ -28,15 +30,25 @@ public interface ProductVariantRepository extends JpaRepository<ProductVariant, 
 
     interface VariantView {
         Long getId();
+
         String getSku();
+
         BigDecimal getPrice();
+
         BigDecimal getSalePrice();
+
         int getStockQuantity();
+
         int getReservedQuantity();
+
         Long getSizeId();
+
         String getSizeName();
+
         Long getColorId();
+
         String getColorName();
+
         String getColorHexCode();
     }
 
@@ -50,24 +62,24 @@ public interface ProductVariantRepository extends JpaRepository<ProductVariant, 
             """, nativeQuery = true)
     List<VariantView> findActiveViewsByProductId(@Param("productId") Long productId);
 
-  @Query("""
-      select min(pv.salePrice) from ProductVariant pv
-      where pv.productId = :productId
-        and pv.active = :active
-        and pv.salePrice is not null
-        and pv.salePrice < pv.price
-      """)
-  Optional<BigDecimal> findMinSalePriceByProductId(@Param("productId") Long productId,
-      @Param("active") Byte active);
+    @Query("""
+            select min(pv.salePrice) from ProductVariant pv
+            where pv.productId = :productId
+              and pv.active = :active
+              and pv.salePrice is not null
+              and pv.salePrice < pv.price
+            """)
+    Optional<BigDecimal> findMinSalePriceByProductId(@Param("productId") Long productId,
+            @Param("active") Byte active);
 
-  /**
-   * Returns the lowest base price among active variants of a product.
-   */
-  @Query("""
-      select min(pv.price) from ProductVariant pv
-      where pv.productId = :productId
-        and pv.active = :active
-      """)
-  Optional<BigDecimal> findMinPriceByProductId(@Param("productId") Long productId,
-      @Param("active") Byte active);
+    /**
+     * Returns the lowest base price among active variants of a product.
+     */
+    @Query("""
+            select min(pv.price) from ProductVariant pv
+            where pv.productId = :productId
+              and pv.active = :active
+            """)
+    Optional<BigDecimal> findMinPriceByProductId(@Param("productId") Long productId,
+            @Param("active") Byte active);
 }

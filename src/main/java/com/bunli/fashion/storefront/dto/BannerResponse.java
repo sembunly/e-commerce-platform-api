@@ -13,7 +13,6 @@ public record BannerResponse(
         Long          id,
         String        title,
         MediaResponse media,
-        /** Convenience top-level URL duplicated from media.url */
         String        imageUrl,
         String        targetUrl,
         int           sortOrder,
