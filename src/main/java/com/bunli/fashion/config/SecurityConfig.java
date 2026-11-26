@@ -3,6 +3,7 @@ package com.bunli.fashion.config;
 import com.bunli.fashion.auth.service.JwtAuthenticationFilter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.context.annotation.*;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -31,7 +32,12 @@ public class SecurityConfig {
                 .authorizeHttpRequests(a -> a.requestMatchers("/api/v1/auth/register", "/api/v1/auth/login",
                         "/api/v1/auth/refresh", "/api/v1/auth/logout", "/api/v1/auth/forgot-password",
                         "/api/v1/auth/reset-password", "/actuator/health", "/swagger-ui.html", "/swagger-ui/**",
-                        "/v3/api-docs/**").permitAll().anyRequest().authenticated())
+                        "/v3/api-docs/**").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/v1/navigation/**", "/api/v1/categories/**",
+                        "/api/v1/collections/**", "/api/v1/home", "/api/v1/banners",
+                        "/api/v1/products/new-arrivals", "/api/v1/products/featured",
+                        "/api/v1/products/best-sellers", "/api/v1/products/sale").permitAll()
+                .anyRequest().authenticated())
                 .exceptionHandling(e -> e.authenticationEntryPoint(
                         (request, response, exception) -> response.sendError(401, "Unauthorized")))
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class).build();
