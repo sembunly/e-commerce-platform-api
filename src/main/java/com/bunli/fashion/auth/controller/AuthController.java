@@ -2,6 +2,8 @@ package com.bunli.fashion.auth.controller;
 
 import com.bunli.fashion.auth.dto.*;
 import com.bunli.fashion.auth.service.AuthService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -52,6 +54,7 @@ public class AuthController {
     }
 
     @GetMapping("/me")
+    @Operation(summary = "Get current user", security = @SecurityRequirement(name = "bearerAuth"))
     public UserResponse me(@AuthenticationPrincipal Long userId) {
         return authService.currentUser(userId);
     }
